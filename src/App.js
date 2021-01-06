@@ -5,6 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import TabPanel from "./components/TabPanel";
 import MovieSearch from "./components/MovieSearch";
+import Movies from "./components/Movies";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,7 @@ export default function App() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [movieTitle, setMovieTitle] = useState('');
+  const [movies, setMovies] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -33,9 +35,12 @@ export default function App() {
   }
 
   const handleSearchMovie = async () => {
-    let movies = await fetch('http://www.omdbapi.com/?i=tt3896198&apikey=da6a286f&s=batman');
-    let result = await movies.json();
-    console.log(`result ${JSON.stringify(result)}`);
+    let response = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=da6a286f&s=${movieTitle}`);
+    let result = await response.json();
+    if (result["Response"]) {
+      setMovies(result["Search"]);
+      console.log(movies);
+    }
   }
 
   return (
@@ -48,6 +53,7 @@ export default function App() {
         </AppBar>
         <TabPanel value={value} index={0}>
           <MovieSearch handleSearchMovie={handleSearchMovie} handleChangeMovieTitle={handleChangeMovieTitle}></MovieSearch>
+          <Movies movies={movies}></Movies>
         </TabPanel>
         <TabPanel value={value} index={1}>
           Nominations
