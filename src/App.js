@@ -19,6 +19,12 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     backgroundColor: "#000000"
+  },
+  banner: {
+    textAlign: "center",
+    padding: "1em",
+    backgroundColor: "red",
+    fontWeight: "bold"
   }
 }));
 
@@ -28,6 +34,7 @@ export default function App() {
   const [movieTitle, setMovieTitle] = useState('');
   const [movies, setMovies] = useState([]);
   const [nominations, setNomination] = useState([]);
+  const [displayBanner, setDisplayBanner] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -55,6 +62,9 @@ export default function App() {
     if (!nominations.some(m => m["imdbID"] === movie["imdbID"])) {
       let newNominations = [...nominations];
       newNominations.push(movie);
+      if (newNominations.length >= 5) {
+        setDisplayBanner(true);
+      }
       setNomination(newNominations);
     }
   }
@@ -64,11 +74,15 @@ export default function App() {
     let filteredNominations = newNominations.filter((m) => {
       return movie["imdbID"] !== m["imdbID"]; 
     });
+    if (filteredNominations.length < 5) {
+      setDisplayBanner(false);
+    }
     setNomination(filteredNominations);
   }
 
   return (
       <div className={classes.root}>
+        {displayBanner && <div className={classes.banner}>You have at least 5 nominations!</div>}
         <AppBar className={classes.appBar} position="static">
           <Tabs className={classes.tabs} value={value} onChange={handleChange}>
             <Tab className={classes.tab} label="Movie Search" />
