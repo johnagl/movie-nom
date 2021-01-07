@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   },
   tab: {
     minWidth: "20em"
+  },
+  appBar: {
+    backgroundColor: "#000000"
   }
 }));
 
@@ -30,9 +33,14 @@ export default function App() {
     setValue(newValue);
   };
 
+  const onKeyDown = async (event) => {
+    if (event.key === 'Enter') {
+      await handleSearchMovie();
+    }
+  }
+
   const handleChangeMovieTitle = (event) => {
     setMovieTitle(event.target.value);
-    console.log(`movieTitle ${movieTitle}`);
   }
 
   const handleSearchMovie = async () => {
@@ -40,7 +48,6 @@ export default function App() {
     let result = await response.json();
     if (result["Response"]) {
       setMovies(result["Search"]);
-      console.log(movies);
     }
   }
 
@@ -57,20 +64,19 @@ export default function App() {
     let filteredNominations = newNominations.filter((m) => {
       return movie["imdbID"] !== m["imdbID"]; 
     });
-    console.log(filteredNominations);
     setNomination(filteredNominations);
   }
 
   return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar className={classes.appBar} position="static">
           <Tabs className={classes.tabs} value={value} onChange={handleChange}>
             <Tab className={classes.tab} label="Movie Search" />
             <Tab className={classes.tab} label="Nominations"  />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <MovieSearch handleSearchMovie={handleSearchMovie} handleChangeMovieTitle={handleChangeMovieTitle}></MovieSearch>
+          <MovieSearch onKeyDown={onKeyDown} handleSearchMovie={handleSearchMovie} handleChangeMovieTitle={handleChangeMovieTitle}></MovieSearch>
           <Movies nominations={nominations} addNomination={addNomination} removeNomination={removeNomination} movies={movies}></Movies>
         </TabPanel>
         <TabPanel value={value} index={1}>
