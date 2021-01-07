@@ -36,7 +36,7 @@ export default function App() {
   }
 
   const handleSearchMovie = async () => {
-    let response = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=da6a286f&s=${movieTitle}`);
+    let response = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${process.env.REACT_APP_OMDBAPI_KEY}&s=${movieTitle}`);
     let result = await response.json();
     if (result["Response"]) {
       setMovies(result["Search"]);
