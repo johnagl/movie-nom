@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Movies = ({movies}) => {
+const Movies = ({movies, addNomination, removeNomination, nominations}) => {
     const classes = useStyles();
     return (
       <Grid container justify="flex-start" spacing={3}>
       {movies.map((movie) => (
         <Grid className={classes.gridItem} key={movie["imdbID"]} item>
-          <MovieMediaCard poster={movie["Poster"]} title={movie["Title"]}></MovieMediaCard>
+          <MovieMediaCard removeNomination={removeNomination} nominated={nominations.some(m => m["imdbID"] === movie["imdbID"])} addNomination={addNomination} movie={movie}></MovieMediaCard>
         </Grid>
       ))}
     </Grid>

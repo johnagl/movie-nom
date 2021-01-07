@@ -24,6 +24,7 @@ export default function App() {
   const [value, setValue] = useState(0);
   const [movieTitle, setMovieTitle] = useState('');
   const [movies, setMovies] = useState([]);
+  const [nominations, setNomination] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -43,6 +44,23 @@ export default function App() {
     }
   }
 
+  const addNomination = (movie) => {
+    if (!nominations.some(m => m["imdbID"] === movie["imdbID"])) {
+      let newNominations = [...nominations];
+      newNominations.push(movie);
+      setNomination(newNominations);
+    }
+  }
+
+  const removeNomination = (movie) => {
+    let newNominations = [...nominations];
+    let filteredNominations = newNominations.filter((m) => {
+      return movie["imdbID"] !== m["imdbID"]; 
+    });
+    console.log(filteredNominations);
+    setNomination(filteredNominations);
+  }
+
   return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -53,10 +71,10 @@ export default function App() {
         </AppBar>
         <TabPanel value={value} index={0}>
           <MovieSearch handleSearchMovie={handleSearchMovie} handleChangeMovieTitle={handleChangeMovieTitle}></MovieSearch>
-          <Movies movies={movies}></Movies>
+          <Movies nominations={nominations} addNomination={addNomination} removeNomination={removeNomination} movies={movies}></Movies>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Nominations
+          <Movies nominations={nominations} addNomination={addNomination} removeNomination={removeNomination} movies={nominations}></Movies>
         </TabPanel>
       </div>
   );

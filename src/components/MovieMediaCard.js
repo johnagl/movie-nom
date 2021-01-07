@@ -16,36 +16,36 @@ const useStyles = makeStyles({
     height: 180
   },
   cardContentRoot: {
-      padding: 0,
+      padding: "4.5px 5px",
   },
   cardActionsRoot: {
       padding: 0,
   }
 });
 
-const MovieMediaCard = ({title, poster}) => {
+const MovieMediaCard = ({addNomination, movie, nominated, removeNomination }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
         <CardMedia
           className={classes.media}
-          image={poster}
+          image={movie["Poster"]}
           title="Contemplative Reptile"
         />
         <CardContent className={classes.cardContentRoot}>
           <Typography variant="body2" component="h6">
-            {title}
+            {movie["Title"]}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-              Year
+              {movie["Year"]}
           </Typography>
         </CardContent>
         <CardActions className={classes.cardActionsRoot}>
-            <Button size="small" color="primary" disabled={true}>
+            <Button onClick={() => addNomination(movie)}size="small" color="primary" disabled={nominated}>
                 Nominate
             </Button>
-            <Button size="small" color="primary" disabled={false}>
+            <Button onClick={() => removeNomination(movie)} size="small" color="primary" disabled={!nominated}>
                 Remove
             </Button>
         </CardActions>
